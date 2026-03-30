@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工具箱 · Toolbox</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600&family=Space+Mono:wght@400;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e0f;
+    --surface: #161618;
+    --surface2: #1e1e21;
+    --border: #2a2a2e;
+    --accent: #e8c87a;
+    --accent2: #7ab8e8;
+    --accent3: #b87ae8;
+    --text: #e8e6e0;
+    --text-muted: #7a7870;
+    --text-dim: #4a4845;
+    --red: #e87a7a;
+    --green: #7ae8b0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans SC', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    position: fixed;
+    left: 0; top: 0;
+    width: 220px;
+    height: 100vh;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    padding: 28px 0;
+  }
+
+  .logo {
+    padding: 0 24px 28px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .logo-sub {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .nav {
+    padding: 20px 12px;
+    flex: 1;
+  }
+
+  .nav-section-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    font-family: 'Space Mono', monospace;
+    padding: 0 12px;
+    margin-bottom: 8px;
+    margin-top: 16px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 13px;
+    color: var(--text-muted);
+    position: relative;
+  }
+
+  .nav-item:hover { background: var(--surface2); color: var(--text); }
+
+  .nav-item.active {
+    background: rgba(232,200,122,0.08);
+    color: var(--accent);
+  }
+
+  .nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 60%;
+    background: var(--accent);
+    border-radius: 0 2px 2px 0;
+  }
+
+  .nav-icon { font-size: 14px; opacity: 0.8; }
+
+  .nav-badge {
+    margin-left: auto;
+    font-size: 9px;
+    font-family: 'Space Mono', monospace;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--text-dim);
+  }
+
+  .sidebar-footer {
+    padding: 20px 24px;
+    border-top: 1px solid var(--border);
+    font-size: 10px;
+    color: var(--text-dim);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ── MAIN ── */
+  .main {
+    margin-left: 220px;
+    min-height: 100vh;
+  }
+
+  .topbar {
+    height: 56px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    background: rgba(14,14,15,0.92);
+    backdrop-filter: blur(12px);
+    z-index: 50;
+  }
+
+  .topbar-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 15px;
+    color: var(--text);
+  }
+
+  .topbar-path {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+
+  .topbar-actions { margin-left: auto; display: flex; gap: 8px; }
+
+  .btn {
+    padding: 6px 14px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-family: 'Noto Sans SC', sans-serif;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    transition: all 0.15s;
+  }
+
+  .btn:hover { background: var(--surface2); color: var(--text); }
+
+  .btn-accent {
+    background: var(--accent);
+    color: #0e0e0f;
+    border-color: var(--accent);
+    font-weight: 500;
+  }
+
+  .btn-accent:hover { opacity: 0.88; background: var(--accent); color: #0e0e0f; }
+
+  /* ── CONTENT ── */
+  .content {
+    padding: 40px;
+    max-width: 1100px;
+  }
+
+  /* ── HOME VIEW ── */
+  .home-hero {
+    margin-bottom: 48px;
+  }
+
+  .home-hero h1 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 12px;
+  }
+
+  .home-hero p {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  .tool-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tool-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--card-color, var(--accent)), transparent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .tool-card:hover { border-color: #3a3a3e; transform: translateY(-2px); }
+  .tool-card:hover::before { opacity: 1; }
+
+  .tool-card-icon { font-size: 28px; margin-bottom: 14px; }
+
+  .tool-card-name {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .tool-card-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  .tool-card-tag {
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 9px;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+
+  .tag-available { color: var(--green); border-color: rgba(122,232,176,0.2); background: rgba(122,232,176,0.05); }
+  .tag-soon { color: var(--text-dim); }
+
+  /* ── WORD COUNTER ── */
+  .wc-layout {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 20px;
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .panel-header {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .panel-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .panel-actions { margin-left: auto; display: flex; gap: 8px; }
+
+  textarea {
+    width: 100%;
+    min-height: 400px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 15px;
+    line-height: 1.9;
+    padding: 24px;
+    resize: vertical;
+    caret-color: var(--accent);
+  }
+
+  textarea::placeholder { color: var(--text-dim); }
+
+  /* Stats panel */
+  .stats-grid {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .stat-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .stat-icon { font-size: 18px; flex-shrink: 0; }
+
+  .stat-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 3px;
+  }
+
+  .stat-accent { --stat-color: var(--accent); }
+  .stat-blue { --stat-color: var(--accent2); }
+  .stat-purple { --stat-color: var(--accent3); }
+  .stat-red { --stat-color: var(--red); }
+  .stat-green { --stat-color: var(--green); }
+
+  .stat-card .stat-value { color: var(--stat-color, var(--text)); }
+
+  /* Progress bar */
+  .target-section {
+    padding: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .target-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .target-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .target-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    padding: 4px 8px;
+    width: 80px;
+    outline: none;
+    text-align: center;
+  }
+
+  .target-input:focus { border-color: var(--accent); }
+
+  .progress-bar-bg {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--accent);
+    transition: width 0.3s ease;
+    max-width: 100%;
+  }
+
+  .progress-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 6px;
+  }
+
+  /* Keyword section */
+  .keywords-section {
+    padding: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .kw-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    font-family: 'Space Mono', monospace;
+    margin-bottom: 10px;
+  }
+
+  .keywords-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .kw-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+  }
+
+  .kw-bar-bg {
+    flex: 1;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .kw-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    opacity: 0.6;
+  }
+
+  .kw-word { color: var(--text); min-width: 60px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .kw-count { color: var(--text-dim); font-family: 'Space Mono', monospace; font-size: 11px; min-width: 24px; text-align: right; }
+
+  /* toolbar */
+  .toolbar {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .tool-btn {
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-family: 'Noto Sans SC', sans-serif;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text-muted);
+    transition: all 0.15s;
+  }
+
+  .tool-btn:hover { color: var(--text); border-color: #3a3a3e; }
+
+  /* reading time indicator */
+  .reading-speeds {
+    padding: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .rs-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    font-family: 'Space Mono', monospace;
+    margin-bottom: 10px;
+  }
+
+  .rs-items { display: flex; flex-direction: column; gap: 6px; }
+
+  .rs-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .rs-item span:last-child {
+    font-family: 'Space Mono', monospace;
+    color: var(--text);
+    font-size: 11px;
+  }
+
+  /* Views */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* notification */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 12px 18px;
+    font-size: 13px;
+    color: var(--text);
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    z-index: 999;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: #4a4a4e; }
+
+  @media (max-width: 900px) {
+    .sidebar { width: 60px; }
+    .logo-text, .logo-sub, .nav-item span, .nav-badge, .nav-section-label, .sidebar-footer { display: none; }
+    .main { margin-left: 60px; }
+    .wc-layout { grid-template-columns: 1fr; }
+    .content { padding: 20px; }
+    .topbar { padding: 0 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="logo">
+    <div class="logo-text">Toolbox</div>
+    <div class="logo-sub">个人工具集</div>
+  </div>
+  <div class="nav">
+    <div class="nav-section-label">首页</div>
+    <div class="nav-item active" onclick="showView('home', this)">
+      <span class="nav-icon">⊞</span>
+      <span>所有工具</span>
+    </div>
+
+    <div class="nav-section-label">文字工具</div>
+    <div class="nav-item" onclick="showView('wordcounter', this)">
+      <span class="nav-icon">文</span>
+      <span>字数计算器</span>
+      <span class="nav-badge">new</span>
+    </div>
+    <div class="nav-item" onclick="showComingSoon()">
+      <span class="nav-icon">⇄</span>
+      <span>格式转换</span>
+    </div>
+    <div class="nav-item" onclick="showComingSoon()">
+      <span class="nav-icon">✦</span>
+      <span>文本对比</span>
+    </div>
+
+    <div class="nav-section-label">实用工具</div>
+    <div class="nav-item" onclick="showComingSoon()">
+      <span class="nav-icon">⊙</span>
+      <span>时间计算</span>
+    </div>
+    <div class="nav-item" onclick="showComingSoon()">
+      <span class="nav-icon">◈</span>
+      <span>颜色工具</span>
+    </div>
+    <div class="nav-item" onclick="showComingSoon()">
+      <span class="nav-icon">⟨/⟩</span>
+      <span>JSON格式化</span>
+    </div>
+  </div>
+  <div class="sidebar-footer">v0.1 · 2026</div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <span id="topbar-title" class="topbar-title">所有工具</span>
+    <span class="topbar-path" id="topbar-path">toolbox /</span>
+    <div class="topbar-actions">
+      <button class="btn btn-accent" onclick="showView('wordcounter', null)">+ 打开工具</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- HOME VIEW -->
+    <div class="view active" id="view-home">
+      <div class="home-hero">
+        <h1>你好，欢迎回来 👋</h1>
+        <p>这是你的个人工具集成站，所有常用小工具都在这里。<br>点击任意工具卡片即可开始使用。</p>
+      </div>
+      <div class="tools-grid">
+        <div class="tool-card" style="--card-color: var(--accent)" onclick="showView('wordcounter', null)">
+          <div class="tool-card-icon">文</div>
+          <div class="tool-card-name">字数计算器</div>
+          <div class="tool-card-desc">字数、词频、阅读时间、段落分析，写作必备。支持目标字数进度追踪。</div>
+          <div class="tool-card-tag tag-available">✓ 可用</div>
+        </div>
+        <div class="tool-card" style="--card-color: var(--accent2)" onclick="showComingSoon()">
+          <div class="tool-card-icon">⇄</div>
+          <div class="tool-card-name">格式转换</div>
+          <div class="tool-card-desc">Markdown ↔ 纯文本，大小写转换，全半角互转，各种文本格式处理。</div>
+          <div class="tool-card-tag tag-soon">开发中</div>
+        </div>
+        <div class="tool-card" style="--card-color: var(--accent3)" onclick="showComingSoon()">
+          <div class="tool-card-icon">✦</div>
+          <div class="tool-card-name">文本对比</div>
+          <div class="tool-card-desc">两段文字逐行对比，高亮差异，适合校对和版本比较。</div>
+          <div class="tool-card-tag tag-soon">开发中</div>
+        </div>
+        <div class="tool-card" style="--card-color: var(--green)" onclick="showComingSoon()">
+          <div class="tool-card-icon">⊙</div>
+          <div class="tool-card-name">时间计算</div>
+          <div class="tool-card-desc">两个日期之间相差多少天、工作日计算、倒计时工具。</div>
+          <div class="tool-card-tag tag-soon">开发中</div>
+        </div>
+        <div class="tool-card" style="--card-color: var(--red)" onclick="showComingSoon()">
+          <div class="tool-card-icon">◈</div>
+          <div class="tool-card-name">颜色工具</div>
+          <div class="tool-card-desc">颜色格式转换 HEX/RGB/HSL，调色板生成，对比度检测。</div>
+          <div class="tool-card-tag tag-soon">开发中</div>
+        </div>
+        <div class="tool-card" style="--card-color: var(--accent2)" onclick="showComingSoon()">
+          <div class="tool-card-icon">⟨/⟩</div>
+          <div class="tool-card-name">JSON 格式化</div>
+          <div class="tool-card-desc">JSON 美化、压缩、校验，树形结构查看。</div>
+          <div class="tool-card-tag tag-soon">开发中</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WORD COUNTER VIEW -->
+    <div class="view" id="view-wordcounter">
+      <div class="wc-layout">
+        <!-- Editor -->
+        <div>
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">✎ 编辑区</span>
+              <div class="panel-actions">
+                <button class="btn" onclick="pasteText()">粘贴</button>
+                <button class="btn" onclick="clearText()">清空</button>
+                <button class="btn btn-accent" onclick="copyStats()">复制统计</button>
+              </div>
+            </div>
+            <textarea id="editor"
+              placeholder="在这里粘贴或输入你的文字……支持中文、英文、混合内容。"
+              oninput="analyze()"></textarea>
+            <div class="toolbar">
+              <button class="tool-btn" onclick="removeExtraSpaces()">清除多余空格</button>
+              <button class="tool-btn" onclick="removeBlankLines()">清除空行</button>
+              <button class="tool-btn" onclick="convertFullHalf()">全角→半角</button>
+              <button class="tool-btn" onclick="trimText()">去首尾空白</button>
+              <button class="tool-btn" onclick="countSelected()">统计选中</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats Panel -->
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">📊 统计数据</span>
+            </div>
+            <div class="stats-grid">
+              <div class="stat-card stat-accent">
+                <div class="stat-icon">字</div>
+                <div>
+                  <div class="stat-value" id="stat-chars">0</div>
+                  <div class="stat-label">总字符数（含空格）</div>
+                </div>
+              </div>
+              <div class="stat-card stat-blue">
+                <div class="stat-icon">文</div>
+                <div>
+                  <div class="stat-value" id="stat-chars-nospace">0</div>
+                  <div class="stat-label">字符数（不含空格）</div>
+                </div>
+              </div>
+              <div class="stat-card stat-purple">
+                <div class="stat-icon">词</div>
+                <div>
+                  <div class="stat-value" id="stat-words">0</div>
+                  <div class="stat-label">中文字 / 英文词</div>
+                </div>
+              </div>
+              <div class="stat-card stat-green">
+                <div class="stat-icon">¶</div>
+                <div>
+                  <div class="stat-value" id="stat-sentences">0</div>
+                  <div class="stat-label">句子数</div>
+                </div>
+              </div>
+              <div class="stat-card stat-red">
+                <div class="stat-icon">§</div>
+                <div>
+                  <div class="stat-value" id="stat-paragraphs">0</div>
+                  <div class="stat-label">段落数</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Target -->
+            <div class="target-section">
+              <div class="target-header">
+                <span class="target-label">目标字数</span>
+                <input class="target-input" type="number" id="target-input" placeholder="0" oninput="updateProgress()" />
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+              </div>
+              <div class="progress-text" id="progress-text">设置目标字数后显示进度</div>
+            </div>
+
+            <!-- Reading speeds -->
+            <div class="reading-speeds">
+              <div class="rs-title">阅读时间</div>
+              <div class="rs-items">
+                <div class="rs-item">
+                  <span>快速阅读（600字/分）</span>
+                  <span id="rs-fast">—</span>
+                </div>
+                <div class="rs-item">
+                  <span>正常阅读（400字/分）</span>
+                  <span id="rs-normal">—</span>
+                </div>
+                <div class="rs-item">
+                  <span>朗读速度（200字/分）</span>
+                  <span id="rs-slow">—</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Keywords -->
+            <div class="keywords-section">
+              <div class="kw-title">高频词汇 Top 5</div>
+              <div class="keywords-list" id="keywords-list">
+                <div style="font-size:11px;color:var(--text-dim)">开始输入文字后显示…</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── VIEW ROUTING ──
+function showView(name, navEl) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  if (navEl) navEl.classList.add('active');
+
+  const titles = { home: '所有工具', wordcounter: '字数计算器' };
+  const paths = { home: 'toolbox /', wordcounter: 'toolbox / 文字工具 / 字数计算器' };
+  document.getElementById('topbar-title').textContent = titles[name] || name;
+  document.getElementById('topbar-path').textContent = paths[name] || '';
+
+  // If no navEl passed (called from card), find and activate correct nav
+  if (!navEl) {
+    document.querySelectorAll('.nav-item').forEach(n => {
+      if (n.onclick && n.onclick.toString().includes("'" + name + "'")) n.classList.add('active');
+    });
+  }
+}
+
+function showComingSoon() {
+  showToast('🚧 该工具正在开发中，敬请期待！');
+}
+
+// ── WORD COUNTER ──
+function analyze() {
+  const text = document.getElementById('editor').value;
+
+  // Chars
+  document.getElementById('stat-chars').textContent = text.length.toLocaleString();
+  document.getElementById('stat-chars-nospace').textContent = text.replace(/\s/g, '').length.toLocaleString();
+
+  // Words: Chinese chars + English words
+  const zhChars = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
+  const enWords = (text.match(/[a-zA-Z]+/g) || []).length;
+  document.getElementById('stat-words').textContent = (zhChars + enWords).toLocaleString();
+
+  // Sentences
+  const sentences = text.split(/[。！？…\.!?]+/).filter(s => s.trim().length > 0).length;
+  document.getElementById('stat-sentences').textContent = sentences;
+
+  // Paragraphs
+  const paragraphs = text.split(/\n+/).filter(p => p.trim().length > 0).length;
+  document.getElementById('stat-paragraphs').textContent = paragraphs || 0;
+
+  // Reading time
+  const wordCount = zhChars + enWords;
+  document.getElementById('rs-fast').textContent = formatTime(wordCount / 600);
+  document.getElementById('rs-normal').textContent = formatTime(wordCount / 400);
+  document.getElementById('rs-slow').textContent = formatTime(wordCount / 200);
+
+  // Keywords
+  updateKeywords(text);
+  updateProgress();
+}
+
+function formatTime(minutes) {
+  if (minutes === 0) return '—';
+  if (minutes < 1) return Math.round(minutes * 60) + ' 秒';
+  const m = Math.floor(minutes);
+  const s = Math.round((minutes - m) * 60);
+  if (m < 60) return s > 0 ? m + ' 分 ' + s + ' 秒' : m + ' 分钟';
+  return Math.floor(m / 60) + ' 小时 ' + (m % 60) + ' 分钟';
+}
+
+function updateKeywords(text) {
+  const stopWords = new Set(['的','了','和','是','在','我','有','他','这','个','们','也','都','着','到','说','要','就','不','为','以','而','吗','啊','呢','吧','嗯','the','a','an','is','are','was','were','it','to','of','and','in','that','for','on','with','as','at','be','by','this','from','or','but','not','have','had','has','an']);
+
+  const freq = {};
+
+  // Chinese chars by word (bigrams for simplicity)
+  const zhWords = text.match(/[\u4e00-\u9fa5]{2,}/g) || [];
+  zhWords.forEach(chunk => {
+    for (let i = 0; i < chunk.length - 1; i++) {
+      const w = chunk.slice(i, i + 2);
+      freq[w] = (freq[w] || 0) + 1;
+    }
+  });
+
+  // English words
+  const enWords = text.match(/[a-zA-Z]{3,}/g) || [];
+  enWords.forEach(w => {
+    const lw = w.toLowerCase();
+    if (!stopWords.has(lw)) freq[lw] = (freq[lw] || 0) + 1;
+  });
+
+  const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  const el = document.getElementById('keywords-list');
+
+  if (sorted.length === 0) {
+    el.innerHTML = '<div style="font-size:11px;color:var(--text-dim)">开始输入文字后显示…</div>';
+    return;
+  }
+
+  const max = sorted[0][1];
+  el.innerHTML = sorted.map(([w, c]) => `
+    <div class="kw-item">
+      <span class="kw-word">${w}</span>
+      <div class="kw-bar-bg"><div class="kw-bar-fill" style="width:${(c/max*100).toFixed(0)}%"></div></div>
+      <span class="kw-count">${c}</span>
+    </div>
+  `).join('');
+}
+
+function updateProgress() {
+  const target = parseInt(document.getElementById('target-input').value) || 0;
+  const text = document.getElementById('editor').value;
+  const zhChars = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
+  const enWords = (text.match(/[a-zA-Z]+/g) || []).length;
+  const current = zhChars + enWords;
+
+  const fill = document.getElementById('progress-fill');
+  const label = document.getElementById('progress-text');
+
+  if (!target) {
+    fill.style.width = '0%';
+    label.textContent = '设置目标字数后显示进度';
+    return;
+  }
+
+  const pct = Math.min(current / target * 100, 100);
+  fill.style.width = pct.toFixed(1) + '%';
+  fill.style.background = pct >= 100 ? 'var(--green)' : 'var(--accent)';
+
+  const remaining = Math.max(target - current, 0);
+  if (pct >= 100) {
+    label.textContent = `✓ 已完成！超出 ${current - target} 字`;
+    label.style.color = 'var(--green)';
+  } else {
+    label.style.color = 'var(--text-muted)';
+    label.textContent = `${pct.toFixed(1)}% · 还差 ${remaining} 字`;
+  }
+}
+
+// ── TOOLBAR ACTIONS ──
+function clearText() {
+  const el = document.getElementById('editor');
+  if (!el.value.trim()) return;
+  el.value = '';
+  analyze();
+  showToast('已清空');
+}
+
+function pasteText() {
+  navigator.clipboard.readText().then(t => {
+    document.getElementById('editor').value += t;
+    analyze();
+    showToast('已粘贴');
+  }).catch(() => showToast('请手动使用 Ctrl+V 粘贴'));
+}
+
+function copyStats() {
+  const chars = document.getElementById('stat-chars').textContent;
+  const charsnsp = document.getElementById('stat-chars-nospace').textContent;
+  const words = document.getElementById('stat-words').textContent;
+  const sentences = document.getElementById('stat-sentences').textContent;
+  const paras = document.getElementById('stat-paragraphs').textContent;
+  const rt = document.getElementById('rs-normal').textContent;
+
+  const stats = `字数统计报告\n──────────────\n总字符数：${chars}\n字符（不含空格）：${charsnsp}\n字词数：${words}\n句子数：${sentences}\n段落数：${paras}\n阅读时间（正常）：${rt}`;
+  navigator.clipboard.writeText(stats).then(() => showToast('统计已复制到剪贴板'));
+}
+
+function removeExtraSpaces() {
+  const el = document.getElementById('editor');
+  el.value = el.value.replace(/[ \t]+/g, ' ');
+  analyze(); showToast('已清除多余空格');
+}
+
+function removeBlankLines() {
+  const el = document.getElementById('editor');
+  el.value = el.value.replace(/\n{2,}/g, '\n');
+  analyze(); showToast('已清除空行');
+}
+
+function convertFullHalf() {
+  const el = document.getElementById('editor');
+  el.value = el.value.replace(/[\uff01-\uff5e]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xfee0));
+  analyze(); showToast('全角已转为半角');
+}
+
+function trimText() {
+  const el = document.getElementById('editor');
+  el.value = el.value.trim();
+  analyze(); showToast('已去除首尾空白');
+}
+
+function countSelected() {
+  const el = document.getElementById('editor');
+  const selected = el.value.substring(el.selectionStart, el.selectionEnd);
+  if (!selected) { showToast('请先在编辑区选中文字'); return; }
+  const zh = (selected.match(/[\u4e00-\u9fa5]/g) || []).length;
+  const en = (selected.match(/[a-zA-Z]+/g) || []).length;
+  showToast(`选中：${selected.length} 字符，${zh + en} 字词`);
+}
+
+// ── TOAST ──
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// Init
+analyze();
+</script>
+</body>
+</html>
